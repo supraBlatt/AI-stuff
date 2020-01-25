@@ -1,5 +1,12 @@
 import utils
 
+
+def distance(ex1, ex2, target):
+    new_ex1 = {key: value for key, value in ex1.items() if key != target}
+    new_ex2 = {key: value for key, value in ex2.items() if key != target}
+    return utils.hamming_distance(list(new_ex1.values()), list(new_ex2.values()))
+
+
 class DataSet:
     def __init__(self, example_set=[], attributes={}):
         self.example_set = example_set  # [example = {attribute : class},..]
@@ -87,11 +94,6 @@ class DataSet:
 
     def class_distribution(self, attr):
         pass
-
-    ''' SET FUNCTIONS '''
-
-    def distance(self, ex1, ex2):
-        return utils.hamming_distance(list(ex1.values()), list(ex2.values()))
 
     ''' GET FUNCTIONS - deep copy'''
 

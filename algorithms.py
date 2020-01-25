@@ -1,16 +1,30 @@
 import utils
-from dataset import DataSet
-
+from dataset import *
+from classification_tree import *
 
 class ID3:
     def __init__(self):
         pass
 
-    def best_division(self, example_set):
-        pass
+    def best_division(self, example_set, target):
+        return ""
 
     def train(self, training_set, attributes, target):
-        pass
+
+        root = Node()
+        attribute, division = self.best_division(training_set, target)
+        root.attribute = attribute
+
+        new_attr = attributes[:]
+        new_attr.remove(attribute)
+        children = {}
+        for cls, examples in division.items():
+            child = self.train(DataSet(examples, training_set.attributes()), new_attr, target)
+            children[cls] = child
+
+        return root
+
+
 
     def predict(self, tree, sample):
         pass
@@ -27,7 +41,7 @@ class KNN:
         self.target = target
 
     def predict(self, sample):
-        distances = [(ex[self.target], self.training_set.distance(ex, sample)) for ex in self.training_set]
+        distances = [(ex[self.target], distance(ex, sample, self.target)) for ex in self.training_set]
         if len(distances) == 0:
             return None
 
@@ -66,6 +80,9 @@ class NaiveBayes:
             # calculate P = Pr(x1|cls)*...
             probability = 1
             for attr, attr_cls in sample.items():
+                if attr == self.target:
+                    continue
+
                 # Pr(attr_cls|cls) = Pr(attr_cls and cls) / Pr(c)
                 probability *= (len(class_division.matches_attribute(attr, attr_cls)) / examples_of_c)
 

@@ -20,15 +20,16 @@ class ClassificationTree:
 
 class Node:
     def __init__(self):
-        self.cls = None
-        self.dividing_by_attribute = None
-        self.kids = {}
+        self.cls = None                    # classification
+        self.dividing_by_attribute = None  # attribute name to split the node by
+        self.kids = {}                     # {cls : Node}
 
     def children(self):
-        pass
+        return self.kids
 
     def classification(self):
-        pass
+        return self.cls
 
     def attribute(self):
-        pass
+        return self.dividing_by_attribute
+
