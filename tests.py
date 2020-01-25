@@ -22,19 +22,22 @@ def k_fold_validation(algorithm, training_set, target_attribute, k):
         training_set = DataSet(example_set, training_set.attributes())
         validation_set = parts[i]
 
-        # for accuracy calculations
-        classifier_answers = []
-        true_answers = []
-
-        # train and predict
-        algorithm.train(training_set, target_attribute)
-        for sample in validation_set:
-            classifier_answers.append(algorithm.predict(sample))
-            true_answers.append(sample[target_attribute])
-
-        acc = accuracy(classifier_answers, true_answers)
+        acc = validate(algorithm, training_set, validation_set, target_attribute)
+        print("Accuracy: ", acc)
         overall_accuracy += acc
 
     return overall_accuracy / len(parts)
 
 
+def validate(algorithm, training_set, validation_set, target_attribute):
+    # for accuracy calculations
+    classifier_answers = []
+    true_answers = []
+
+    # train and predict
+    algorithm.train(training_set, target_attribute)
+    for sample in validation_set:
+        classifier_answers.append(algorithm.predict(sample))
+        true_answers.append(sample[target_attribute])
+
+    return accuracy(classifier_answers, true_answers)

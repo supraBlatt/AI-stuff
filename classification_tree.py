@@ -3,7 +3,8 @@ def print_in_depth(cur_node, depth):
     if depth > 0:
         start += '|'
     printed = ""
-    for cls, child in cur_node.children().items():
+    for cls in sorted(cur_node.children()):
+        child = cur_node.children()[cls]
         printed += start + cur_node.attribute() + "=" + cls
 
         if child.classification():
@@ -18,15 +19,13 @@ class ClassificationTree:
         self.algorithm = algorithm
         self.root = None
 
-    def print_tree(self):
-        with open('tree.txt', 'w') as output:
+    def print_tree(self, file_name):
+        with open(file_name, 'w') as output:
             output.write(print_in_depth(self.root, 0))
 
     def train(self, training_set, target):
         attributes = [attr for attr in training_set.attributes().keys() if attr != target]
         self.root = self.algorithm.train(training_set, attributes, target)
-        self.print_tree()
-        return
 
     def predict(self, sample):
         return self.algorithm.predict(self.root, sample)

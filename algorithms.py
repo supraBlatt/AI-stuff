@@ -1,6 +1,6 @@
-import utils, functions
-from dataset import *
+import functions
 from classification_tree import *
+from dataset import *
 
 
 def best_division(data_set, attributes, target):
