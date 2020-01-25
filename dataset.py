@@ -1,10 +1,10 @@
 import utils
 
 class DataSet:
-    def __init__(self):
-        self.example_set = []  # [example = {attribute : class},..]
-        self.attr = {}         # {name: Attribute}
-        self.index = 0         # index for iteration
+    def __init__(self, example_set=[], attributes={}):
+        self.example_set = example_set  # [example = {attribute : class},..]
+        self.attr = attributes          # {name: Attribute}
+        self.index = 0                  # index for iteration
 
     ''' ITERATION FUNCTIONS'''
 
@@ -26,6 +26,9 @@ class DataSet:
 
         self.index += 1
         return result
+
+    def __len__(self):
+        return len(self.example_set)
 
     ''' CREATION SET FUNCTION '''
 
@@ -60,11 +63,27 @@ class DataSet:
 
     ''' ATTRIBUTE FUNCTIONS '''
 
-    def matches_attribute(self, attr, cls):
-        pass
+    def matches_attribute(self, attribute, cls):
+        if attribute not in self.attr.keys():
+            raise Exception("Not A Valid Attribute")
+        if cls not in self.attr[attribute].classes():
+            raise Exception("Not A Valid Class")
 
-    def divide_by_attribute(self, attr):
-        pass
+        matches = []
+        for ex in self.example_set:
+            if ex[attribute] == cls:
+                matches.append(ex)
+        return matches
+
+    def divide_by_attribute(self, attribute):
+        if attribute not in self.attr.keys():
+            raise Exception("Not A Valid Attribute")
+        classes = self.attr[attribute].classes()
+
+        division = {}
+        for cls in classes:
+            division[cls] = self.matches_attribute(attribute, cls)
+        return division
 
     def class_distribution(self, attr):
         pass
@@ -77,23 +96,10 @@ class DataSet:
     ''' GET FUNCTIONS - deep copy'''
 
     def attributes(self):
-        pass
+        return {attr.name(): Attribute(attr.name(), attr.classes()) for attr in self.attr.values()}
 
     def classes(self, attr):
         pass
-
-    def examples(self):
-        pass
-
-    def __str__(self):
-        s = "dataset\n"
-        for att in self.attr.values():
-            s += str(att) + '\n'
-        s += "Target = " + str(self.target) + '\n'
-
-        for ex in self.example_set:
-            s += str(ex)
-        return s
 
 
 ''' Basic Data Classes To Make Things More Organised '''

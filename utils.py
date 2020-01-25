@@ -1,10 +1,8 @@
 import math
 
-
+# doesn't keep order
 def divide_to_n_parts(lst, n):
-    [1,2,3,4,5,6,7]
-    part_size = math.ceil(len(lst) / n)  # 7 / 5 = 1.4 -> 2
-    return [lst[pos:pos + part_size] for pos in range(0, len(lst), part_size)]  # lst[6 [0,2,4,6]
+    return [lst[pos::n] for pos in range(n)]
 
 
 def hamming_distance(lst1, lst2):
@@ -39,3 +37,9 @@ def most_common(lst):
 
     # return the most common one
     return max(distribution, key=distribution.get)
+
+
+def arg_max(dictionary):
+    if len(dictionary.keys()) == 0:
+        raise Exception("Empty Dictionary")
+    return max(dictionary, key=dictionary.get)
