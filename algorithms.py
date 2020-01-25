@@ -3,13 +3,14 @@ from dataset import *
 from classification_tree import *
 
 
-def best_division(data_set, attributes):
+def best_division(data_set, attributes, target):
     information_gains = {}
 
     for attr in attributes:
         division = data_set.divide_by_attribute(attr).values()
-        information_gains[attr] = functions.information_gain(attr, division)
+        information_gains[attr] = functions.information_gain(target, division)
     return utils.arg_max(information_gains)
+
 
 class ID3:
     def __init__(self):

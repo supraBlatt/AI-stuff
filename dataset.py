@@ -118,20 +118,3 @@ class Attribute:
 
     def classes(self):
         return self.cls.copy()
-
-'''
-class Example:
-    def __init__(self, attributes=[], classes=[]):
-        self.values = {key: value for key, value in zip(attributes, classes)}
-
-    def __getitem__(self, attribute):
-        if attribute not in self.values.keys():
-            raise Exception("No Such Class")
-        return self.values[attribute]
-
-    def __str__(self):
-        s = "example\n"
-        for attr, cls in self.values.items():
-            s += "\t|" + attr + " = " + cls + '\n'
-        return s
-'''
