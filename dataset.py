@@ -105,8 +105,6 @@ class DataSet:
     def attributes(self):
         return {attr.name(): Attribute(attr.name(), attr.classes()) for attr in self.attr.values()}
 
-    def classes(self, attr):
-        pass
 
 
 ''' Basic Data Classes To Make Things More Organised '''

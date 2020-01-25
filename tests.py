@@ -33,7 +33,6 @@ def k_fold_validation(algorithm, training_set, target_attribute, k):
             true_answers.append(sample[target_attribute])
 
         acc = accuracy(classifier_answers, true_answers)
-        print("Accuracy = ", acc)
         overall_accuracy += acc
 
     return overall_accuracy / len(parts)

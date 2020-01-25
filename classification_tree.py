@@ -1,9 +1,10 @@
 def print_in_depth(cur_node, depth):
-    printed = '\t'*depth
+    start = '\t'*depth
     if depth > 0:
-        printed += '|'
+        start += '|'
+    printed = ""
     for cls, child in cur_node.children().items():
-        printed += cur_node.attribute() + "=" + cls
+        printed += start + cur_node.attribute() + "=" + cls
 
         if child.classification():
             printed += ":" + child.classification() + '\n'
@@ -18,7 +19,7 @@ class ClassificationTree:
         self.root = None
 
     def print_tree(self):
-        with open('output.txt', 'w') as output:
+        with open('tree.txt', 'w') as output:
             output.write(print_in_depth(self.root, 0))
 
     def train(self, training_set, target):
