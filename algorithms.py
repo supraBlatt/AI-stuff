@@ -69,7 +69,7 @@ class KNN:
         self.k = k
         self.target = None
 
-    def train(self, training_set, target):
+    def train(self, training_test, target):
         self.training_set = training_set
         self.target = target
 
