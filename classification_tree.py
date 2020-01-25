@@ -1,5 +1,15 @@
-def print_node(node):
-    pass
+def print_in_depth(cur_node, depth):
+    printed = '\t'*depth
+    if depth > 0:
+        printed += '|'
+    for cls, child in cur_node.children().items():
+        printed += cur_node.attribute() + "=" + cls
+
+        if child.classification():
+            printed += ":" + child.classification() + '\n'
+        else:
+            printed += '\n' + print_in_depth(child, depth + 1)
+    return printed
 
 
 class ClassificationTree:
@@ -8,11 +18,13 @@ class ClassificationTree:
         self.root = None
 
     def print_tree(self):
-        pass
+        with open('output.txt', 'w') as output:
+            output.write(print_in_depth(self.root, 0))
 
     def train(self, training_set, target):
         attributes = [attr for attr in training_set.attributes().keys() if attr != target]
         self.root = self.algorithm.train(training_set, attributes, target)
+        self.print_tree()
         return
 
     def predict(self, sample):
@@ -22,7 +34,7 @@ class ClassificationTree:
 class Node:
     def __init__(self):
         self.cls = None                    # classification
-        self.dividing_by_attribute = None  # attribute name to split the node by
+        self.dividing_by_attribute = ""  # attribute name to split the node by
         self.kids = {}                     # {cls : Node}
         self.amount = 0
 

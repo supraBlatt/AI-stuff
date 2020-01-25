@@ -8,8 +8,11 @@ def best_division(data_set, attributes, target):
 
     for attr in attributes:
         division = data_set.divide_by_attribute(attr).values()
-        information_gains[attr] = functions.information_gain(target, division)
-    return utils.arg_max(information_gains)
+        distributions = [list(DataSet(div, data_set.attributes()).class_distribution(target).values())
+                         for div in division if len(div) > 0]
+        information_gains[attr] = functions.information_gain(distributions)
+    max_attr = utils.arg_max(information_gains)
+    return max_attr, data_set.divide_by_attribute(max_attr)
 
 
 class ID3:
@@ -21,23 +24,26 @@ class ID3:
             return None
 
         root = Node()
-        most_cls = utils.arg_max(training_set.class_distribution(target))
+        dist = training_set.class_distribution(target)
+        most_cls = utils.arg_max(dist)
 
         # check for leaf -- no more attributes to divide by or homogenous
-        if len(attributes) == 0 or most_cls == len(training_set):
+        if len(attributes) == 0 or dist[most_cls] == len(training_set):
             root.cls = most_cls
             return root
 
-        attribute, division = best_division(training_set, target)
-        root.attribute = attribute
+        attribute, division = best_division(training_set, attributes, target)
+        div = {cls: [e[attribute] for e in ex] for cls, ex in division.items()}
+        root.dividing_by_attribute = attribute
         new_attr = attributes[:]
         new_attr.remove(attribute)
 
         children = {}
         for cls, examples in division.items():
             child = self.train(DataSet(examples, training_set.attributes()), new_attr, target)
-            child.amount = len(examples)
-            children[cls] = child
+            if child:
+                child.amount = len(examples)
+                children[cls] = child
         root.kids = children
         return root
 
@@ -50,7 +56,7 @@ class ID3:
             kids = cur_node.children()
 
             # if you don't have a route to continue on choose the most populated one
-            if sample[cur_node.attribute()] not in kids.values():
+            if sample[cur_node.attribute()] not in kids.keys():
                 cur_node = kids[utils.arg_max({cls: child.amount_of_examples() for cls, child in kids.items()})]
             else:
                 cur_node = kids[sample[cur_node.attribute()]]

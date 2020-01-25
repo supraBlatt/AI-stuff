@@ -89,7 +89,11 @@ class DataSet:
 
         division = {}
         for cls in classes:
-            division[cls] = self.matches_attribute(attribute, cls)
+            division[cls] = []
+
+        for example in self.example_set:
+            division[example[attribute]].append(example)
+
         return division
 
     def class_distribution(self, attribute):
