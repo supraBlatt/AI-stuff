@@ -1,33 +1,59 @@
-import utils
+import utils, functions
 from dataset import *
 from classification_tree import *
+
+
+def best_division(data_set, attributes):
+    information_gains = {}
+
+    for attr in attributes:
+        division = data_set.divide_by_attribute(attr).values()
+        information_gains[attr] = functions.information_gain(attr, division)
+    return utils.arg_max(information_gains)
 
 class ID3:
     def __init__(self):
         pass
 
-    def best_division(self, example_set, target):
-        return ""
-
     def train(self, training_set, attributes, target):
+        if not training_set:
+            return None
 
         root = Node()
-        attribute, division = self.best_division(training_set, target)
-        root.attribute = attribute
+        most_cls = utils.arg_max(training_set.class_distribution(target))
 
+        # check for leaf -- no more attributes to divide by or homogenous
+        if len(attributes) == 0 or most_cls == len(training_set):
+            root.cls = most_cls
+            return root
+
+        attribute, division = best_division(training_set, target)
+        root.attribute = attribute
         new_attr = attributes[:]
         new_attr.remove(attribute)
+
         children = {}
         for cls, examples in division.items():
             child = self.train(DataSet(examples, training_set.attributes()), new_attr, target)
+            child.amount = len(examples)
             children[cls] = child
-
+        root.kids = children
         return root
 
-
-
     def predict(self, tree, sample):
-        pass
+        if not tree:
+            return None
+
+        cur_node = tree
+        while not cur_node.classification():
+            kids = cur_node.children()
+
+            # if you don't have a route to continue on choose the most populated one
+            if sample[cur_node.attribute()] not in kids.values():
+                cur_node = kids[utils.arg_max({cls: child.amount_of_examples() for cls, child in kids.items()})]
+            else:
+                cur_node = kids[sample[cur_node.attribute()]]
+        return cur_node.classification()
 
 
 class KNN:

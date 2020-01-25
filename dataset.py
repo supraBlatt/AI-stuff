@@ -92,8 +92,9 @@ class DataSet:
             division[cls] = self.matches_attribute(attribute, cls)
         return division
 
-    def class_distribution(self, attr):
-        pass
+    def class_distribution(self, attribute):
+        division = self.divide_by_attribute(attribute)
+        return {key: len(value) for key, value in division.items()}
 
     ''' GET FUNCTIONS - deep copy'''
 
