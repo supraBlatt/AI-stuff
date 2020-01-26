@@ -10,12 +10,9 @@ def main():
 
     training = DataSet()
     target = training.load_from_file("train.txt")
-
     validation = DataSet()
     validation.load_from_file("test.txt")
-
     output_file = "output.txt"
-    another_one = DataSet()
 
     # run the algorithms
     acc = []
