@@ -3,6 +3,7 @@ from algorithms import *
 
 
 def get_algorithm(alg_name):
+
     if alg_name == "id3":
         return ClassificationTree(ID3())
     elif alg_name == "knn":

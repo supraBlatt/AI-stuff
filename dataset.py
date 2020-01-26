@@ -9,9 +9,9 @@ def distance(ex1, ex2, target):
 
 class DataSet:
     def __init__(self, example_set=[], attributes={}):
-        self.example_set = example_set  # [example = {attribute : class},..]
-        self.attr = attributes          # {name: Attribute}
-        self.index = 0                  # index for iteration
+        self.example_set = example_set.copy()  # [example = {attribute : class},..]
+        self.attr = attributes.copy()          # {name: Attribute}
+        self.index = 0                         # index for iteration
 
     ''' ITERATION FUNCTIONS'''
 
@@ -41,6 +41,7 @@ class DataSet:
 
     # returns the target attribute
     def load_from_file(self, file_name):
+        self.example_set = []
         with open(file_name, 'r') as database:
 
             # assuming attributes are at the first line

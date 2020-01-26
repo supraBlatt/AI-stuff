@@ -33,11 +33,12 @@ def validate(algorithm, training_set, validation_set, target_attribute):
     # for accuracy calculations
     classifier_answers = []
     true_answers = []
-
     # train and predict
     algorithm.train(training_set, target_attribute)
+    count = 0
     for sample in validation_set:
         classifier_answers.append(algorithm.predict(sample))
         true_answers.append(sample[target_attribute])
+        count += 1
 
     return accuracy(classifier_answers, true_answers)
