@@ -6,7 +6,6 @@ def divide_to_n_parts(lst, n):
 
 
 def hamming_distance(lst1, lst2):
-    to_compare = []
     distance = 0
     tmp1 = lst1[:]
     tmp2 = lst2[:]
